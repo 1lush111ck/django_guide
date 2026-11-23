@@ -1,0 +1,71 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Магазин{% endblock %}</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Навигационная панель (Navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+        <div class="container">
+            <!-- Логотип со ссылкой на главную страницу -->
+            <a class="navbar-brand fw-bold" href="{% url 'main:product_list' %}">Shop</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Ссылка на все товары -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if not category %}active{% endif %}" href="{% url 'main:product_list' %}">
+                            Все товары
+                        </a>
+                    </li>
+
+                    <!-- Цикл вывода категорий -->
+                    {% for c in categories %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if category.slug == c.slug %}active{% endif %}" href="{{ c.get_absolute_url }}">
+                                {{ c.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Кнопка корзины (на 1:16:00 она еще без логики, автор добавит её позже) -->
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-dark position-relative">
+                        <i class="bi bi-cart"></i> Корзина
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент страницы -->
+    <main class="container flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Футер (подвал сайта) -->
+    <footer class="bg-light text-center text-muted py-4 mt-5 border-top">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Мой Интернет-Магазин. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Скрипт Bootstrap JS -->
+    <script src="https://jsdelivr.net"></script>
+</body>
+</html>
